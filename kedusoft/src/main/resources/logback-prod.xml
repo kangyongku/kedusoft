@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <configuration scan="true" scanPeriod="600 seconds"> --><!-- 600초마다 설정 파일의 변경을 확인하여 변경시 갱신 운영적용시 -->
+<configuration>
+	<!-- 로그 패턴에 색상 적용 %clr(pattern){color} https://logback.qos.ch/manual/layouts.html#coloring -->
+	<conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+	
+	<!-- springProfile 태그를 사용하여 profile 별 property 값 설정 -->
+	<springProfile name="local"> <!-- local log file path -->
+	    <property name="LOG_PATH" value="/kedusoft/tomcat/logs/kedusoft"/>
+	</springProfile>
+	
+	<!-- Environment 내의 프로퍼티들을 개별적으로 설정 -->
+	<springProperty scope="context" name="LOG_LEVEL" source="logging.level.root"/>
+	
+	<!-- log file name -->
+	<property name="LOG_FILE_NAME" value="kedusoft_log"/>
+	<!-- err log file name -->
+	<property name="ERR_LOG_FILE_NAME" value="kedusoft_err_log"/>
+	<!-- console log pattern -->
+	<property name="CONSOLE_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}]  %clr(%-5level) %clr(---) %clr(%-40.40logger{36}){cyan} %clr(:){faint} %msg%n"/>
+	<!-- file log pattern -->
+	<property name="FILE_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %-5level ${PID:-} --- [%15.15thread] %-40.40logger{36} : %msg%n"/>
+	
+	<!-- Console Appender -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${CONSOLE_LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- File Appender -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 파일경로 설정 -->
+		<file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+		
+		<!-- 출력패턴 설정 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+		</encoder>
+		
+		<!-- Rolling 정책 일자별 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- .gz .zip 등을 넣으면 자동 일자별 로그 파일 압축 -->
+			<fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.zip</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- 파일당 최고 용량 kb, mb, gb -->
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- 일자별 로그 파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거 -->
+			<maxHistory>30</maxHistory>
+			<!-- 전체 파일 크기를 제어하며, 전체 크기 제한을 조과하면 가장 오래된 파일을 삭제 -->
+			<totalSizeCap>1GB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+	
+	<!-- 에러의 경우 파일에 로그 처리 -->
+	<appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>error</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${LOG_PATH}/${ERR_LOG_FILE_NAME}.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>${FILE_LOG_PATTERN}</pattern>
+		</encoder>
+	
+		<!-- Rolling 정책 일자별 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- .gz .zip 등을 넣으면 자동 일자별 로그파일 압축 -->
+			<fileNamePattern>${LOG_PATH}/${ERR_LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- 파일당 최고 용량 kb, mb, gb -->
+				<maxFileSize>50MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+			<!-- 일자별 로그 파일 최대 보관주기(~일), 해당 설정일 이상된 파일은 자동으로 제거 -->
+			<maxHistory>1825</maxHistory>
+		</rollingPolicy>
+	</appender>
+	
+	<!-- SQL Logger -->
+	<logger name="jdbc" level="OFF" />
+	<logger name="jdbc.sqlonly" level="OFF" />
+	<logger name="jdbc.sqltiming" level="INFO" />		<!-- SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. -->
+	<logger name="jdbc.audit" level="OFF" />			<!-- ResultSet을 제외한 모든 JDBC 호출 정보를 로그로 남긴다. 많은 양의 로그가 생성되므로 특별히 JDBC 문제를 추적해야 할 필요가 있는 경우를 제외하고는 사용을 권장하지 않는다.  -->
+	<logger name="jdbc.resultset" level="OFF" />		<!-- ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다.  -->
+	<logger name="jdbc.resultsettable" level="INFO" />
+	<!-- 
+	<logger name="jdbc.resultsettable" level="INFO" additivity="false">
+		<Filters>
+			'SECRET_DATA'라는 단어가 포함된 로그 이벤트는 차단(DENY)
+			<RegexFilter regex="(?s).*NOTRESULTTABLE.*" onMatch="DENY" onMismatch="ACCEPT"/>
+		</Filters>
+		<AppenderRef ref="CONSOLE" />
+	</logger>
+	 -->
+	<logger name="jdbc.connection" level="OFF" /> 		<!-- 열려있는 모든 번호와 연결 수립 및 해제 이벤트를 기록. 이는 연결 문제를 찾아내는데 매우 유용 (Connection Pool 설정) -->
+	<!-- SQL Logger -->
+	
+	<!-- root 레벨 설정 -->
+	<root level="${LOG_LEVEL}">
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="FILE"/>
+		<appender-ref ref="ERROR"/>
+	</root>
+</configuration>
+	

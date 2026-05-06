@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.home.kedusoft.mapper.SupportMapper">
+	
+	<select id="selectBoardCnt" parameterType="boarddto" resultType="int">
+	/*BoardMapper.selectBoardCnt */
+		SELECT 
+			COUNT(board_idx)
+		FROM BOARD
+		WHERE BOARD_ID = #{boardId}
+		<if test='keyWord != null and !"".equals(keyWord)'>
+			<choose>
+			<when test='"title".equals(keyfield)'>
+			AND BOARD_TITLE LIKE CONCAT('%', #{keyWord}, '%')
+			</when>
+			<when test='"content".equals(keyfield)'>
+			AND BOARD_CONTENT LIKE CONCAT('%', #{keyWord}, '%')
+			</when>
+			<when test='"name".equals(keyfield)'>
+			AND BOARD_WRITER = #{keyWord}
+			AND BOARD_WRITER LIKE CONCAT('%', #{keyWord}, '%')
+			</when>
+			</choose>
+		</if>
+	</select>
+	
+	<select id="selectBoardList" parameterType="boarddto" resultType="boarddto">
+	/*BoardMapper.selectBoardList */
+		SELECT 
+			BOARD_IDX, BOARD_ID, BOARD_TITLE
+			, BOARD_CNT
+			, DATE_FORMAT(REG_DATE,'%Y-%m-%d') AS REG_DATE
+			, M.M_NAME AS BOARD_WRITER
+		FROM BOARD B
+		LEFT JOIN MEMBER M ON M.M_ID = B.BOARD_WRITER 
+		WHERE BOARD_ID = #{boardId}
+		<if test='keyWord != null and !"".equals(keyWord)'>
+			<choose>
+			<when test='"title".equals(keyfield)'>
+			AND BOARD_TITLE LIKE CONCAT('%', #{keyWord}, '%')
+			</when>
+			<when test='"content".equals(keyfield)'>
+			AND BOARD_CONTENT LIKE CONCAT('%', #{keyWord}, '%')
+			</when>
+			<when test='"name".equals(keyfield)'>
+			AND BOARD_WRITER = #{keyWord}
+			AND BOARD_WRITER LIKE CONCAT('%', #{keyWord}, '%')
+			</when>
+			</choose>
+		</if>
+		ORDER BY REG_DATE, BOARD_IDX DESC
+		LIMIT #{offset} , #{recordSize}
+	</select>
+	
+	<select id="selectBoardView" parameterType="boarddto" resultType="boarddto">
+	/*BoardMapper.selectBoardView */
+		SELECT 
+			BOARD_IDX, BOARD_ID, BOARD_TITLE
+			, BOARD_CNT
+			, DATE_FORMAT(REG_DATE,'%Y-%m-%d') AS REG_DATE
+			, M.M_NAME AS BOARD_WRITER
+		FROM BOARD B
+		LEFT JOIN MEMBER M ON M.M_ID = B.BOARD_WRITER 
+		WHERE BOARD_ID = #{boardId}
+		AND BOARD_IDX = #{boardIdx}
+	</select>
+</mapper>

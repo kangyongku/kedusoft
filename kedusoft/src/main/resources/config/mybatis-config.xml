@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<!-- <setting name="logImpl" value="LOG4J" /> -->
+		<setting name="useColumnLabel" value="true"/><!-- 컬럼명 대신 컬럼 라벨을 사용 -->
+		<setting name="cacheEnabled" value="false" /><!-- 설정에서 각 매퍼에 설정된 캐시를 전역적으로 사용할지 말지에 대한 여부 -->
+		<setting name="callSettersOnNulls" value="true" /><!-- map 리턴시 null  경우 누락되는 현상이 나오는데 이를 해결하기 위해 -->
+		<setting name="defaultStatementTimeout" value="15000" /><!-- 15초 데이터베이스로의 응답을 얼마나 오래 기다릴지를 판단하는 타임아웃을 설정  -->
+		<!-- <setting name="mapUnderscoreToCamelCase" value="true"/> -->
+	</settings>
+	
+	<typeAliases>
+	
+		<typeAlias alias="string" type="java.lang.String" />
+		<typeAlias alias="hashmap" type="java.util.HashMap" />
+		<typeAlias alias="map" type="java.util.Map" />
+		<typeAlias alias="list" type="java.util.List" />
+		<typeAlias alias="boarddto" type="com.home.kedusoft.main.domain.BoardDto" />
+	</typeAliases>
+</configuration>
