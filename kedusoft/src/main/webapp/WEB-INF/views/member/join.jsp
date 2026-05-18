@@ -22,28 +22,56 @@
 			
 			<script src="/include/aes.js"></script>
 							<script>
-							function funcCheckId()
-							{
+							function funcCheckId() {
+								// 20260518 Y.C.H 수정
 								var f = document.f;
-								f.target="_iframe";
-								f.action="/sub/logCheckId.asp"
-								f.submit();
+								
+								// 아이디 값 확인
+								if (f.userId.value=="") {
+									alert("아이디를 입력해 주세요."); 
+									f.userId.focus(); return; 
+								}
+								
+					            $.ajax({
+					                url : "/member/checkId", // 결과를 처리할 JSP 페이지
+					                type : "post",
+					                data : { "memberId" : f.memberId.value },
+					                success : function(res){
+
+					                    alert(res.msg);
+					                    if(res.success != true){
+					                        return false;
+					                    }
+					                    
+					                    // ---------- 아이디 사용가능시 처리 로직 START ----------
+					                    
+					                    // ---------- 아이디 사용가능시 처리 로직 END ----------
+					                    
+					                },
+					                error : function(){
+					                    alert("에러가 발생했습니다.");
+					                }
+					            });								
 							}
-							function goNext()
-							{
-								if(!document.getElementById("agreePolicy").checked) {
+							
+							function goNext() {
+							
+/* 								if(!document.getElementById("agreePolicy").checked) {
 									document.getElementById("agreePolicy").focus();
 									alert('개인정보수집동의에 체크해 주세요.');
 									return;
-								}
+								} */
 
 								var f = document.f;
-								if (f.userId.value=="") {alert("아이디를 입력해 주세요."); f.userId.focus(); return; }
+							
+								//console.log(f);
+								
+/* 								if (f.memberId.value=="") {alert("아이디를 입력해 주세요."); f.memberId.focus(); return; }
 								if (f.pw1.value=="") {alert("비밀번호를 입력해 주세요."); f.pw1.focus(); return; }
 								if (f.pw2.value=="") {alert("비밀번호를 입력해 주세요."); f.pw2.focus(); return; }
 								if (f.pw1.value.length<8) {alert("비밀번호는 8자리 이상입니다."); f.pw1.focus(); return; }
 								if (f.pw1.value!=f.pw2.value) {alert("비밀번호를 확인해 주세요."); f.pw2.focus(); return; }
-								if (f.userName.value=="") {alert("성명을 입력해 주세요."); f.userName.focus(); return; }
+								if (f.memberName.value=="") {alert("성명을 입력해 주세요."); f.memberName.focus(); return; }
 								if (f.mtel1.value=="") {alert("휴대폰번호를 입력해 주세요."); f.mtel1.focus(); return; }
 								if (f.mtel2.value=="") {alert("휴대폰번호를 입력해 주세요."); f.mtel2.focus(); return; }
 								if (f.mtel3.value=="") {alert("휴대폰번호를 입력해 주세요."); f.mtel3.focus(); return; }
@@ -53,18 +81,49 @@
 								f.passwd.value = CryptoJS.MD5(f.pw1.value);
 								f.pw1.value = "";
 								f.pw2.value = "";
-
+								 
 								f.target="_self";
-								f.action="/sub/logJoinExec.asp"
-								f.submit();
+								f.action="/member/memberJoin"
+								f.submit();*/
+								
+						        let formDataArray = $('#myForm').serializeArray();
+						        let formDataObj = {};
+						        
+						        $.each(formDataArray, function(i, field) {
+						            formDataObj[field.name] = field.value;
+						        });			
+						        
+						        console.log(formDataObj);
+								
+					            $.ajax({
+					                url : "/member/memberJoin", // 결과를 처리할 JSP 페이지
+					                type : "post",
+					                data : JSON.stringify(formDataObj),
+					                contentType: 'application/json; charset=UTF-8',
+					                success : function(res){
+
+					                    alert(res.msg);
+					                    if(res.success != true){
+					                        return false;
+					                    }
+					                    
+					                    // ---------- 아이디 사용가능시 처리 로직 START ----------
+					                    
+					                    // ---------- 아이디 사용가능시 처리 로직 END ----------
+					                    
+					                },
+					                error : function(){
+					                    alert("에러가 발생했습니다.");
+					                }
+					            });	
 							}
 							</script>
-							<form name=f method=post>
+							<form name=f method=post id="myForm">
 							<h4>ㆍ기본정보</h4>
 							<div class="bbsWidth writeArea">
 								<div class="writeLine">
 									<div class="writeLeftTitle">아이디<fcr>*</fcr></div>
-									<div class="writeRight tl"><input name="userId" type="text" class="writeSubject">
+									<div class="writeRight tl"><input name="memberId" id="memberId" type="text" class="writeSubject">
 										&nbsp;<a href="javascript:funcCheckId();">[검색]</a>
 										</div>
 								</div>
@@ -79,7 +138,7 @@
 								</div>
 								<div class="writeLine">
 									<div class="writeLeftTitle">성 명<fcr>*</fcr></div>
-									<div class="writeRight tl"><input name="userName" type="text" class="writeSubject"></div>
+									<div class="writeRight tl"><input name="memberName" type="text" class="writeSubject"></div>
 								</div>
 								<div class="writeLine">
 									<div class="writeLeftTitle">연락처(휴대폰)<fcr>*</fcr></div>
