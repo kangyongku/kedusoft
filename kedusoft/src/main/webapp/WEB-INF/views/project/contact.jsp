@@ -3,6 +3,33 @@
 <!DOCTYPE html>
 <html>
 <%@ include file="/WEB-INF/views/include/head.jsp"%>
+<script type="text/javascript">
+
+function submitContact() {
+    // 필수값 유효성 검사 등 필요한 로직 수행...
+    $('#step').val("insert");
+    
+    $('#contactTel').val($('#contactTel1').val()+$('#contactTel2').val()+$('#contactTel13').val());
+    
+    $.ajax({
+        url: '/project/contactProcess',
+        type: 'POST',
+        data: $('#contactForm').serialize(), // 폼 안의 데이터들을 자동으로 DTO 변수명에 맞게 직렬화
+        dataType: 'json',
+        success: function(response) {
+            alert(response.message);
+            if (response.status) {
+                
+                location.reload();
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("서버 통신 중 에러가 발생했습니다.");
+            console.error(error);
+        }
+    });
+}
+</script>
 <body>
 	<%@ include file="/WEB-INF/views/include/header.jsp"%>
 	<div class="divMenu menus">
@@ -22,11 +49,12 @@
 			<h4>ㆍ문의절차</h4>
 			<img src=/images/main/process.gif style="border:1px solid silver;">
 			
-			<form name="f" method="post">
-				<input type="hidden" name="nextPage" value="/sub/menu32.asp">
-				<input type="hidden" name="appId" value="${appId }">
-				<input type="hidden" name="appTypeId" value="${appTypeId}">
-				<input type="hidden" name="upTypeId">
+			<form id="contactForm" name="contactForm" method="post">
+				<input type="hidden" id="nextPage" name="nextPage" value="/sub/menu32.asp">
+				<input type="hidden" id="contactTel" name="contactTel" value="">
+				<input type="hidden" id="contactEmail" name="contactEmail" value="">
+				<input type="hidden" id="step" name="step" value="">
+				
 				<br><br><br><h4>ㆍ기본정보</h4>
 				<div class="bbsWidth writeArea">
 					<div class="writeLine">
@@ -42,11 +70,11 @@
 					</div>
 					<div class="writeLine">
 						<div class="writeLeftTitle">소속기업<fcr>*</fcr></div>
-						<div class="writeRight tl"><input name="compName" type="text" class="writeSubject" value=""></div>
+						<div class="writeRight tl"><input name="companyName" type="text" class="writeSubject" value=""></div>
 					</div>
 					<div class="writeLine">
 						<div class="writeLeftTitle">담당자 성명<fcr>*</fcr></div>
-						<div class="writeRight tl"><input name="userName" type="text" class="writeSubject" value=""></div>
+						<div class="writeRight tl"><input name="customerName" type="text" class="writeSubject" value=""></div>
 					</div>
 					<div class="writeLine">
 						<div class="writeLeftTitle">소속부서<fcr>*</fcr></div>
@@ -59,7 +87,7 @@
 					<div class="writeLine">
 						<div class="writeLeftTitle">연락처(사무실)</div>
 						<div class="writeRight tl">
-							<select name="tel1" class="writeText" style="width:75px; ">
+							<select id="contactTel1" name="contactTel1" class="writeText" style="width:75px; ">
 								<option value="">선택</option>
 								<option value="02">02</option>
 								<option value="031">031</option>
@@ -80,8 +108,8 @@
 								<option value="064">064</option>
 								<option value="070">070</option>
 							</select>-
-							<input name="tel2" type="text" class="writeText2" maxlength=4 value="">-
-							<input name="tel3" type="text" class="writeText2" maxlength=4 value="">
+							<input id="contactTel2" name="contactTel2" type="text" class="writeText2" maxlength=4 value="">-
+							<input id="contactTel3" name="contactTel3" type="text" class="writeText2" maxlength=4 value="">
 							</div>
 					</div>
 					<div class="writeLine">
@@ -140,7 +168,7 @@
 								<input id="agreePolicy" type="checkbox"> 동의합니다.<br><br><br>
 								<div id="divConfirm" class="bbsWidth">
 									<div class="board_search" style="text-align:center;">
-						<a href="javascript:regApp();"><span class=bbsSearch>확 인</span></a>
+						<a href="javascript:submitContact();"><span class=bbsSearch>확 인</span></a>
 					</div>
 				</div>
 				</form>

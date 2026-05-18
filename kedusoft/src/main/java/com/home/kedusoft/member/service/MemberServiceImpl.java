@@ -1,4 +1,4 @@
-package com.home.kedusoft.member.service.implement;
+package com.home.kedusoft.member.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,13 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.home.kedusoft.main.domain.MemberDto;
 import com.home.kedusoft.mapper.MemberMapper;
-import com.home.kedusoft.member.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class MemberImplement implements MemberService {
+public class MemberServiceImpl implements MemberService {
 	
 	@Autowired
 	MemberMapper memberMapper;

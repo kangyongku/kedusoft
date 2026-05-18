@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.home.kedusoft.mapper.ProjectMapper">
+	
+	<insert id="insertProjectContact" parameterType="projectcontactdto"
+	useGeneratedKeys="true" keyProperty="contactNo">
+	/* ProjectMapper.insertProjectContact */
+		INSERT INTO PROJECT_CONTACT (
+			  company_name
+			, customer_name
+			, contact_tel
+			, contact_email
+			, contact_bizrno
+			, contact_title
+			, contact_content
+			, contact_budget
+			, contact_period
+		) VALUES (
+			  #{companyName}
+			, #{customerName}
+			, #{contactTel}
+			, #{contactEmail}
+			, #{contactBizrno}
+			, #{contactTitle}
+			, #{contactContent}
+			, #{contactBudget}
+			, #{contactPeriod}
+		)
+	</insert>
+	
+	<update id="updateProjectContact" parameterType="com.home.kedusoft.project.domain.ProjectContactDto">
+	/* ProjectMapper.updateProjectContact */
+		UPDATE PROJECT_CONTACT
+		SET
+			  company_name = #{companyName}
+			, customer_name = #{customerName}
+			, contact_tel = #{contactTel}
+			, contact_email = #{contactEmail}
+			, contact_bizrno = #{contactBizrno}
+			, contact_title = #{contactTitle}
+			, contact_content = #{contactContent}
+			, contact_budget = #{contactBudget}
+			, contact_period = #{contactPeriod}
+			, udt_date = NOW()  /* 수정 시 현재 시간으로 업데이트 */
+		WHERE contact_no = #{contactNo}
+	</update>
+
+	<update id="deleteProjectContact" parameterType="Long">
+	/* ProjectMapper.deleteProjectContact */
+		UPDATE PROJECT_CONTACT SET
+			  delete_yn = 'Y'
+			, udt_date = NOW()
+		WHERE contact_no = #{contactNo}
+	</update>
+	
+</mapper>
