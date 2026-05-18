@@ -53,7 +53,7 @@
 				<div class="loginText tl loginBox2">
 					ㆍ아직 회원이 아니세요?
 					<div class="confirmBox">
-						<a href="/sub/logJoin.asp"><div class="confirmButton2">회원가입</div></a>
+						<a href="/member/join"><div class="confirmButton2">회원가입</div></a>
 					</div>
 				</div>
 				<div class="loginText tl loginBox2">
@@ -61,7 +61,7 @@
 					ㆍ아이디와 비밀번호 기억나지 않아요
 					</div>
 					<div class="confirmBox">
-						<a href="/sub/logIdpw.asp"><div class="confirmButton2">ID/PW찾기</div></a>
+						<a href="/member/find"><div class="confirmButton2">ID/PW찾기</div></a>
 					</div>
 				</div>
 			</div>

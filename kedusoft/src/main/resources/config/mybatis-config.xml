@@ -18,5 +18,6 @@
 		<typeAlias alias="map" type="java.util.Map" />
 		<typeAlias alias="list" type="java.util.List" />
 		<typeAlias alias="boarddto" type="com.home.kedusoft.main.domain.BoardDto" />
+		<typeAlias alias="memberDto" type="com.home.kedusoft.main.domain.MemberDto" />
 	</typeAliases>
 </configuration>
