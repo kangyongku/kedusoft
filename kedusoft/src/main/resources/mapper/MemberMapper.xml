@@ -4,12 +4,57 @@
 <mapper namespace="com.home.kedusoft.mapper.MemberMapper">
 	
 	<select id="memberIdCheck" parameterType="memberDto" resultType="int">
-		<![CDATA[	/*MemberMapper.memberIdCheck (회원가입 아이디 중복체크)*/
-			SELECT COUNT(M_ID) AS CHECK_CNT
+		<![CDATA[
+			/*MemberMapper.memberIdCheck (회원가입 아이디 중복체크)*/	
+			SELECT COUNT(member_id) AS CHECK_CNT
 			  FROM MEMBER
 			 WHERE 1 = 1
-			   AND M_ID = #{memberId}
+			   AND member_id = #{memberId}
 		]]>
 	</select>
+	
+	<insert id="insertMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="memberSeq">
+	    INSERT INTO MEMBER (	/*MemberMapper.insertMember (회원 등록)*/
+	          member_id
+	        , member_name
+	        , member_password
+	        , member_phone
+	        , member_email
+	        , business_number
+	        , ceo_name
+	        , company_name
+	        , company_phone
+	        , privacy_agree
+	        , privacy_agree_date
+	    ) VALUES (
+	          #{memberId}
+	        , #{memberName}
+	        , #{memberPassword}
+	        , #{memberPhone}
+	        , #{memberEmail}
+	        , #{businessNumber}
+	        , #{ceoName}
+	        , #{companyName}
+	        , #{companyPhone}
+	        , #{privacyAgree}
+	        , NOW()
+	    )
+	</insert>
+	
+	<update id="updateMember" parameterType="memberDto">
+	    UPDATE MEMBER	/*MemberMapper.updateMember (회원 정보수정)*/
+	    <set>
+	        <if test="memberName != null">member_name = #{memberName},</if>
+	        <if test="memberPassword != null">member_password = #{memberPassword},</if>
+	        <if test="memberPhone != null">member_phone = #{memberPhone},</if>
+	        <if test="memberEmail != null">member_email = #{memberEmail},</if>
+	        <if test="businessNumber != null">business_number = #{businessNumber},</if>
+	        <if test="ceoName != null">ceo_name = #{ceoName},</if>
+	        <if test="companyName != null">company_name = #{companyName},</if>
+	        <if test="companyPhone != null">company_phone = #{companyPhone},</if>
+	        updated_at = NOW()
+	    </set>
+	    WHERE member_seq = #{memberSeq}
+	</update>			
 	
 </mapper>

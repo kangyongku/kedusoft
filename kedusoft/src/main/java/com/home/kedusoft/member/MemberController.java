@@ -2,9 +2,7 @@ package com.home.kedusoft.member;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,19 +10,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.home.kedusoft.common.response.ResultResponse;
 import com.home.kedusoft.common.util.CommonUtil;
-import com.home.kedusoft.main.domain.MemberDto;
 import com.home.kedusoft.main.domain.MenuDto;
+import com.home.kedusoft.member.domain.MemberDto;
 import com.home.kedusoft.member.service.MemberService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/member")
+@RequiredArgsConstructor
 public class MemberController {
 	
-	@Autowired
-	MemberService memberService;
+	private final MemberService memberService;
 
 	/* 로그인 */
 	@GetMapping(value = {"/login", "/mobile/login"} )
@@ -54,18 +54,16 @@ public class MemberController {
 	}
 
 	/* 회원가입 아이디 검색(중복체크)*/
-	@PostMapping(value = {"/checkId"} )
 	@ResponseBody
-	public Map<String, Object> memberIdCheck(HttpServletRequest request, Model model, @Validated MemberDto memberDto) throws Exception {
-		
+	@PostMapping(value = {"/checkId"} )
+	public ResultResponse<Map<String, Object>> memberIdCheck(@RequestBody @Validated MemberDto memberDto) throws Exception {
 		return memberService.memberIdCheck(memberDto);
 	}
 
 	/* 회원가입 등록*/
-	@PostMapping(value = {"/memberJoin"} )
 	@ResponseBody
-	public Map<String, Object> memberJoin(HttpServletRequest request, Model model, @RequestBody MemberDto memberDto) throws Exception {
-		
+	@PostMapping(value = {"/memberJoin"} )
+	public ResultResponse<Map<String, Object>> memberJoin(@RequestBody @Validated MemberDto memberDto) throws Exception {
 		return memberService.memberJoin(memberDto);
 	}
 }

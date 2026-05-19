@@ -2,7 +2,7 @@ package com.home.kedusoft.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.home.kedusoft.main.domain.MemberDto;
+import com.home.kedusoft.member.domain.MemberDto;
 
 @Mapper
 public interface MemberMapper {
