@@ -13,4 +13,10 @@ public interface MemberService {
 	// 회원가입 등록
 	ResultResponse<Map<String, Object>> memberJoin(MemberDto memberDto) throws Exception;
 
+	// 회원아이디 찾기
+	ResultResponse<String> memberIdFind(MemberDto memberDto) throws Exception;
+	
+	// 회원비밀번호 찾기
+	ResultResponse<Map<String, Object>> memberPasswordFind(MemberDto memberDto) throws Exception;
+
 }

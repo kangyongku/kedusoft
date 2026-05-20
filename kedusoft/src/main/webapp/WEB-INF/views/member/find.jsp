@@ -26,7 +26,7 @@
 			<div class="bbsWidth writeArea">
 				<div class="writeLine">
 					<div class="writeLeftTitle">성　명<fcr>*</fcr></div>
-					<div class="writeRight tl"><input type="text" name=userName class="writeSubject"></div>
+					<div class="writeRight tl"><input type="text" name=memberName class="writeSubject"></div>
 				</div>
 				<div class="writeLine">
 					<div class="writeLeftTitle">휴대폰<fcr>*</fcr></div>
@@ -43,7 +43,7 @@
 			<div class="bbsWidth writeArea">
 				<div class="writeLine">
 					<div class="writeLeftTitle">아이디<fcr>*</fcr></div>
-					<div class="writeRight tl"><input type="text" name=userId class="writeSubject"></div>
+					<div class="writeRight tl"><input type="text" name=memberId class="writeSubject"></div>
 				</div>
 				<div class="writeLine">
 					<div class="writeLeftTitle">휴대폰<fcr>*</fcr></div>
@@ -60,5 +60,76 @@
 		</div>
 </section>
 <%@ include file="/WEB-INF/views/include/footer.jsp"%>
+
+<script>
+	function searchIdpw(type) {
+		
+		var f = document.f;
+		let formDataObj = {};
+		
+		let $form = $("form[name='f']");
+	    $form.find("input[name='searTypeId']").val(type);
+	
+	    if (type === 1) {
+	        // 아이디 찾기 유효성 검사
+	        let name = $("input[name='memberName']").val();
+	        let tel = $("input[name='mtel']").val();
+	
+	        if (!name) {
+	            alert("성명을 입력해주세요.");
+	            $("input[name='memberName']").focus();
+	            return;
+	        }
+	        if (!tel) {
+	            alert("휴대폰 번호를 입력해주세요.");
+	            $("input[name='mtel']").focus();
+	            return;
+	        }
+	        
+	        // 하이픈 제거 후 값 변경
+	        $("input[name='mtel']").val(tel.replace(/-/g, ""));
+	        
+	        formDataObj = {"memberName" : f.memberName.value, "memberPhone" :  f.mtel.value};
+	        
+	    } else if (type === 2) {
+	        // 비밀번호 찾기 유효성 검사
+	        let id = $("input[name='memberId']").val();
+	        let tel = $("input[name='mtel2']").val();
+	
+	        if (!id) {
+	            alert("아이디를 입력해주세요.");
+	            $("input[name='memberId']").focus();
+	            return;
+	        }
+	        if (!tel) {
+	            alert("휴대폰 번호를 입력해주세요.");
+	            $("input[name='mtel2']").focus();
+	            return;
+	        }
+	
+	        // 하이픈 제거 후 값 변경
+	        $("input[name='mtel2']").val(tel.replace(/-/g, ""));
+	        
+	        formDataObj = {"memberId" : f.memberId.value, "memberPhone" :  f.mtel2.value};
+	    }
+	
+	    // 서버로 전송
+        $.ajax({
+            url : "/member/userId", // 결과를 처리할 JSP 페이지
+            type : "post",
+            data : JSON.stringify(formDataObj),
+            contentType: 'application/json; charset=UTF-8',
+            success : function(res){
+
+                alert(res.message);
+            },
+            error : function(){
+                alert("에러가 발생했습니다.");
+            }
+        });		    
+	    
+	}
+</script>
+
 </body>
 </html>

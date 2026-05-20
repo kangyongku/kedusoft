@@ -16,5 +16,9 @@ public interface MemberMapper {
 	int memberIdCheck(MemberDto dto) throws Exception;
 
 	int insertMember(MemberDto dto) throws Exception;
+	
+	String selMemberId(MemberDto dto) throws Exception;
+	
+	String selMemberPassword(MemberDto dto) throws Exception;
 
 }

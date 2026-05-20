@@ -26,20 +26,20 @@ import lombok.extern.slf4j.Slf4j;
 public class MybatisConfig {
 	
 	private final ApplicationContext applicationContext;
-	
-	@Bean
-	@ConfigurationProperties(prefix="spring.datasource.hikari")
-	public HikariConfig hikariconfig() {
+
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    HikariConfig hikariconfig() {
 		return new HikariConfig();
 	}
-	
-	@Bean
-	public DataSource dataSource() {
+
+    @Bean
+    DataSource dataSource() {
 		return new HikariDataSource(hikariconfig());
 	}
 
     @Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
+    SqlSessionFactory sqlSessionFactory() throws Exception {
 
 		SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
 		sessionFactoryBean.setDataSource(dataSource());

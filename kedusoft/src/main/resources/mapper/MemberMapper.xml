@@ -5,11 +5,20 @@
 	
 	<select id="memberIdCheck" parameterType="memberDto" resultType="int">
 		<![CDATA[
-			/*MemberMapper.memberIdCheck (회원가입 아이디 중복체크)*/	
-			SELECT COUNT(member_id) AS CHECK_CNT
+			SELECT COUNT(member_id) AS CHECK_CNT	/*MemberMapper.memberIdCheck (회원가입 아이디 중복체크)*/	
 			  FROM MEMBER
 			 WHERE 1 = 1
 			   AND member_id = #{memberId}
+		]]>
+	</select>
+	
+	<select id="selMemberId" parameterType="memberDto" resultType="String">
+		<![CDATA[
+			SELECT member_id	/*MemberMapper.selMemberId (회원가입 아이디 찾기)*/	
+			  FROM MEMBER
+			 WHERE 1 = 1
+			   AND member_name  = #{memberName}
+			   AND member_phone = #{memberPhone}
 		]]>
 	</select>
 	

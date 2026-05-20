@@ -62,8 +62,22 @@ public class MemberController {
 
 	/* 회원가입 등록*/
 	@ResponseBody
-	@PostMapping(value = {"/memberJoin"} )
+	@PostMapping(value = {"/userJoin"} )
 	public ResultResponse<Map<String, Object>> memberJoin(@RequestBody @Validated MemberDto memberDto) throws Exception {
 		return memberService.memberJoin(memberDto);
+	}
+
+	/* 계정찾기*/
+	@ResponseBody
+	@PostMapping(value = {"/userId"} )
+	public ResultResponse<String> memberIdFind(@RequestBody @Validated MemberDto memberDto) throws Exception {
+		return memberService.memberIdFind(memberDto);
+	}
+
+	/* 비밀번호찾기*/
+	@ResponseBody
+	@PostMapping(value = {"/userPw"} )
+	public ResultResponse<Map<String, Object>> memberPasswordFind(@RequestBody @Validated MemberDto memberDto) throws Exception {
+		return memberService.memberPasswordFind(memberDto);
 	}
 }

@@ -226,7 +226,7 @@
 	        
 	        if(confirm("입력하신 정보로 회원 가입 하시겠습니까?")){
 	            $.ajax({
-	                url : "/member/memberJoin", // 결과를 처리할 JSP 페이지
+	                url : "/member/userJoin", // 결과를 처리할 JSP 페이지
 	                type : "post",
 	                data : JSON.stringify(formDataObj),
 	                contentType: 'application/json; charset=UTF-8',
