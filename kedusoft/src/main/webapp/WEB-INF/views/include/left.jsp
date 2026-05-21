@@ -48,7 +48,7 @@
 			</li>
 		</ul>
 	</c:when>
-	<c:when test="${menuDto.menuHead eq 5 }">
+	<c:when test="${menuDto.menuHead eq 5 and empty loginInfo}">
 		<ul>
 			<li <c:if test="${menuDto.menuLeft eq 1 }">class='on'</c:if>>
 			<a href="/member/login">로그인</a>
