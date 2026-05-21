@@ -159,7 +159,7 @@ $(document).ready(function(){
 		<c:choose>
 			<c:when test="${not empty loginInfo }">
 				<a href="/member/info" class="all_menu" title="회원정보수정"><img src="/images/main/icoLoginfo.png" width="25"></a>
-				<a href="/member/logout" class="all_menu" title="로그아웃"><img src="/images/main/icoLogout.png" width="25"></a>
+				<a href="/member/userLogout" class="all_menu" title="로그아웃"><img src="/images/main/icoLogout.png" width="25"></a>
 			</c:when>
 			<c:otherwise>
 				<a href="/member/login" class="all_menu" title="로그인">

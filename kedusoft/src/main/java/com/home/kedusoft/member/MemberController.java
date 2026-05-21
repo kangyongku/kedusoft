@@ -137,11 +137,22 @@ public class MemberController {
 		HttpSession session = request.getSession();
 		
 		// 2. 세션에 로그인 유저 정보 적재 (key: ssUserId)
-		session.setAttribute("ssUserId", returnDto.getMemberId());
+		returnDto.setMemberPassword(null);
+		session.setAttribute("loginInfo", returnDto);
 		
 		// 3. 로그인 완료 후 메인 페이지 또는 원하는 페이지로 리다이렉트
 		//return "redirect:/";
 		
 		return ResultResponse.success(ErrorCode.USER_LOGIN_SUCCESS);
 	}
+	
+	@GetMapping("/userLogout")
+	public String logoutSimple(HttpServletRequest request) {
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate(); // 세션 전체 무효화
+		}
+		return "redirect:/member/login";
+	}	
+	
 }
