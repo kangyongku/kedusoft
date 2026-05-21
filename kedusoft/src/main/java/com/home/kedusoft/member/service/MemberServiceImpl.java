@@ -168,6 +168,10 @@ public class MemberServiceImpl implements MemberService {
 		return selectMember(memberDto);
 	}
 	
+	@Override
+	public int memberInUpdate(HttpServletRequest request, MemberDto memberDto) throws Exception {
+		return memberMapper.updMember(memberDto);
+	}
 	
 	private int selectMemberCheck(MemberDto memberDto) throws Exception  {
 		return memberMapper.selMemberCheck(memberDto);
@@ -176,7 +180,4 @@ public class MemberServiceImpl implements MemberService {
 	private MemberDto selectMember(MemberDto memberDto) throws Exception  {
 		return memberMapper.selMember(memberDto);
 	}
-
-
-
 }

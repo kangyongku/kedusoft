@@ -21,7 +21,8 @@
 	<select id="selMember" parameterType="memberDto" resultType="memberDto">
 			SELECT member_id					/*MemberMapper.selMember (회원가입 아이디 찾기)*/	
 			     , member_password
-			     , member_name	
+			     , member_name
+			     , member_email	
 			  FROM MEMBER
 			 WHERE 1 = 1
 			 <if test="memberName != null and memberName != ''">
@@ -92,9 +93,6 @@
 	        	updated_at = NOW()
 	    </set>
 	    WHERE member_id = #{memberId}
-	      <if test="memberPhone != null and memberPhone != ''">
-	      	AND member_phone = #{memberPhone}
-	      </if>
 	</update>
 	
 	<update id="updMemberPw" parameterType="memberDto">

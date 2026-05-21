@@ -26,5 +26,7 @@ public interface MemberService {
 	
 	// 회원정보 조회
 	MemberDto getMemberInfo(MemberDto memberDto) throws Exception;
-
+	
+	// 회원정보 수정
+	int memberInUpdate(HttpServletRequest request, MemberDto paramDto) throws Exception;
 }

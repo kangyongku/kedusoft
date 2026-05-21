@@ -153,6 +153,54 @@ public class MemberController {
 			session.invalidate(); // 세션 전체 무효화
 		}
 		return "redirect:/member/login";
-	}	
+	}
+	
+	/* 회원정보 수정*/
+	@GetMapping(value = {"/info", "/mobile/info"} )
+    public String info(HttpServletRequest request, MenuDto menuDto, HttpSession session) {
+        
+		// 로그인 체크 (세션에 loginInfo가 없으면 로그인 페이지로 튕김)
+        if(session.getAttribute("loginInfo") == null) {
+            return "redirect:/member/login";
+        }
+        
+        menuDto.setMenuHead(5);
+        menuDto.setTitle("회원정보수정");
+        return CommonUtil.deviceReturn(request, "member/info");
+    }
+	
+	/* 회원정보 수정*/
+	@ResponseBody
+    @PostMapping(value = {"/updateInfo", "/mobile/updateInfo"})
+    public ResultResponse<Map<String, Object>> updateInfo(HttpServletRequest request, @RequestBody MemberDto paramDto, HttpSession session) throws Exception {
+        
+        // 세션 유효성 검사 방어 로직
+        MemberDto sessionDto = (MemberDto) session.getAttribute("loginInfo");
+        if(sessionDto == null || !sessionDto.getMemberId().equals(paramDto.getMemberId())) {
+             return ResultResponse.fail("잘못된 접근이거나 로그인이 만료되었습니다.");
+        }
+
+        // 비밀번호가 입력되어 넘어온 경우 (변경 의사가 있는 경우)
+        // Argon2 등 기존에 사용하시던 PasswordUtil 로직으로 암호화하여 세팅
+        if(paramDto.getMemberPassword() != null && !paramDto.getMemberPassword().isEmpty()) {
+            String encodedPw = PasswordUtil.encode(paramDto.getMemberPassword()); // 기존 Argon2 인코딩 모듈 사용
+            paramDto.setMemberPassword(encodedPw);
+        }
+
+        // DB Update (Service -> Mapper 호출)
+        int result = memberService.memberInUpdate(request, paramDto);
+
+        if(result > 0) {
+            // 변경된 정보로 세션 갱신
+            MemberDto updatedDto = memberService.getMemberInfo(paramDto);
+            if(updatedDto != null) {
+                updatedDto.setMemberPassword(null); // 비밀번호 민감정보 제거
+                session.setAttribute("loginInfo", updatedDto);
+            }
+            return ResultResponse.success(ErrorCode.USER_UPDATE_SUCCESS);
+        } else {
+            return ResultResponse.fail(ErrorCode.USER_UPDATE_FAIL);
+        }
+    }
 	
 }
