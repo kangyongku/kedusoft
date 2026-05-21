@@ -22,7 +22,8 @@
 			SELECT member_id					/*MemberMapper.selMember (회원가입 아이디 찾기)*/	
 			     , member_password
 			     , member_name
-			     , member_email	
+			     , member_email
+			     , member_phone	
 			  FROM MEMBER
 			 WHERE 1 = 1
 			 <if test="memberName != null and memberName != ''">
