@@ -162,7 +162,12 @@ public class MemberServiceImpl implements MemberService {
 			return ResultResponse.fail(ErrorCode.USER_UPDATE_FAIL);	
 		}
 	}
-
+	
+	@Override
+	public MemberDto getMemberInfo(MemberDto memberDto) throws Exception {
+		return selectMember(memberDto);
+	}
+	
 	
 	private int selectMemberCheck(MemberDto memberDto) throws Exception  {
 		return memberMapper.selMemberCheck(memberDto);
@@ -171,6 +176,7 @@ public class MemberServiceImpl implements MemberService {
 	private MemberDto selectMember(MemberDto memberDto) throws Exception  {
 		return memberMapper.selMember(memberDto);
 	}
+
 
 
 }

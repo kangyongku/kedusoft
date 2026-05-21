@@ -19,7 +19,8 @@
 	</select>
 	
 	<select id="selMember" parameterType="memberDto" resultType="memberDto">
-			SELECT member_id					/*MemberMapper.selMember (회원가입 아이디 찾기)*/		
+			SELECT member_id					/*MemberMapper.selMember (회원가입 아이디 찾기)*/	
+			     , member_password	
 			  FROM MEMBER
 			 WHERE 1 = 1
 			 <if test="memberName != null and memberName != ''">

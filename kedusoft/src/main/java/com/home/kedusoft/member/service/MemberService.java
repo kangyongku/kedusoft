@@ -23,5 +23,8 @@ public interface MemberService {
 
 	// 회원비밀번호 수정
 	ResultResponse<Map<String, Object>> memberPasswordUpdate(HttpServletRequest request, MemberDto memberDto) throws Exception;
+	
+	// 회원정보 조회
+	MemberDto getMemberInfo(MemberDto memberDto) throws Exception;
 
 }
