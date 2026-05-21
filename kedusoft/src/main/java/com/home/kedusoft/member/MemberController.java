@@ -80,4 +80,20 @@ public class MemberController {
 	public ResultResponse<Map<String, Object>> memberPasswordFind(@RequestBody @Validated MemberDto memberDto) throws Exception {
 		return memberService.memberPasswordFind(memberDto);
 	}
+	
+	/* 비밀번호 변경*/
+	@PostMapping(value = {"/changePw", "/mobile/changePw"} )
+	public String memberPasswordChange(HttpServletRequest request, MenuDto menuDto) {
+		menuDto.setMenuHead(5);
+		menuDto.setMenuLeft(3);
+		menuDto.setTitle("비밀번호 변경");
+		return CommonUtil.deviceReturn(request, "member/changePw");
+	}
+	
+	/* 비밀번호 수정*/
+	@ResponseBody
+	@PostMapping(value = {"/updatePw"} )
+	public ResultResponse<Map<String, Object>> memberPasswordUpdate(HttpServletRequest request, @RequestBody @Validated MemberDto memberDto) throws Exception {
+		return memberService.memberPasswordUpdate(request, memberDto);
+	}	
 }

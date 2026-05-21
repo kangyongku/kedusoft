@@ -3,26 +3,37 @@
 
 <mapper namespace="com.home.kedusoft.mapper.MemberMapper">
 	
-	<select id="memberIdCheck" parameterType="memberDto" resultType="int">
-		<![CDATA[
-			SELECT COUNT(member_id) AS CHECK_CNT	/*MemberMapper.memberIdCheck (회원가입 아이디 중복체크)*/	
+	<select id="selMemberCheck" parameterType="memberDto" resultType="int">
+			SELECT COUNT(member_id) AS CHECK_CNT	/*MemberMapper.selMemberCheck (회원가입 체크)*/	
 			  FROM MEMBER
 			 WHERE 1 = 1
-			   AND member_id = #{memberId}
-		]]>
-	</select>
-	
-	<select id="selMemberId" parameterType="memberDto" resultType="String">
-		<![CDATA[
-			SELECT member_id	/*MemberMapper.selMemberId (회원가입 아이디 찾기)*/	
-			  FROM MEMBER
-			 WHERE 1 = 1
+			 <if test="memberName != null and memberName != ''">
 			   AND member_name  = #{memberName}
-			   AND member_phone = #{memberPhone}
-		]]>
+			 </if>
+			 <if test="memberId != null and memberId != ''">
+			   AND member_id  = #{memberId}
+			 </if>
+			 <if test="memberPhone != null and memberPhone != ''">
+			   AND member_phone  = #{memberPhone}
+			 </if>			   
 	</select>
 	
-	<insert id="insertMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="memberSeq">
+	<select id="selMember" parameterType="memberDto" resultType="memberDto">
+			SELECT member_id					/*MemberMapper.selMember (회원가입 아이디 찾기)*/		
+			  FROM MEMBER
+			 WHERE 1 = 1
+			 <if test="memberName != null and memberName != ''">
+			   AND member_name  = #{memberName}
+			 </if>
+			 <if test="memberId != null and memberId != ''">
+			   AND member_id  = #{memberId}
+			 </if>
+			 <if test="memberPhone != null and memberPhone != ''">
+			   AND member_phone  = #{memberPhone}
+			 </if>
+	</select>
+	
+	<insert id="insMember" parameterType="memberDto" useGeneratedKeys="true" keyProperty="memberSeq">
 	    INSERT INTO MEMBER (	/*MemberMapper.insertMember (회원 등록)*/
 	          member_id
 	        , member_name
@@ -50,20 +61,50 @@
 	    )
 	</insert>
 	
-	<update id="updateMember" parameterType="memberDto">
-	    UPDATE MEMBER	/*MemberMapper.updateMember (회원 정보수정)*/
+	<update id="updMember" parameterType="memberDto">
+	    UPDATE MEMBER	/*MemberMapper.updMember (회원 정보수정)*/
 	    <set>
-	        <if test="memberName != null">member_name = #{memberName},</if>
-	        <if test="memberPassword != null">member_password = #{memberPassword},</if>
-	        <if test="memberPhone != null">member_phone = #{memberPhone},</if>
-	        <if test="memberEmail != null">member_email = #{memberEmail},</if>
-	        <if test="businessNumber != null">business_number = #{businessNumber},</if>
-	        <if test="ceoName != null">ceo_name = #{ceoName},</if>
-	        <if test="companyName != null">company_name = #{companyName},</if>
-	        <if test="companyPhone != null">company_phone = #{companyPhone},</if>
-	        updated_at = NOW()
+	        <if test="memberName != null and memberName != ''">
+	        	member_name = #{memberName},
+	        </if>
+	        <if test="memberPassword != null and memberPassword != ''">
+	        	member_password = #{memberPassword},
+	        </if>
+	        <if test="memberPhone != null and memberPhone != ''">
+	        	member_phone = #{memberPhone},
+	        </if>
+	        <if test="memberEmail != null and memberEmail != ''">
+	        	member_email = #{memberEmail},
+	        </if>
+	        <if test="businessNumber != null and businessNumber != ''">
+	        	business_number = #{businessNumber},
+	        </if>
+	        <if test="ceoName != null and ceoName != ''">
+	        	ceo_name = #{ceoName},</if>
+	        <if test="companyName != null and companyName != ''">
+	        	company_name = #{companyName},
+	        </if>
+	        <if test="companyPhone != null and companyPhone != ''">
+	        	company_phone = #{companyPhone},
+	        </if>
+	        	updated_at = NOW()
 	    </set>
-	    WHERE member_seq = #{memberSeq}
+	    WHERE member_id = #{memberId}
+	      <if test="memberPhone != null and memberPhone != ''">
+	      	AND member_phone = #{memberPhone}
+	      </if>
+	</update>
+	
+	<update id="updMemberPw" parameterType="memberDto">
+	    UPDATE MEMBER	/*MemberMapper.updMemberPw (회원 비밀번호 수정)*/
+	    <set>
+	        	member_password = #{memberPassword},
+	        	updated_at = NOW()
+	    </set>
+	    WHERE member_id = #{memberId}
+	      <if test="memberPhone != null and memberPhone != ''">
+	      	AND member_phone = #{memberPhone}
+	      </if>	
 	</update>			
 	
 </mapper>

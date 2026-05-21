@@ -31,8 +31,13 @@ public enum ErrorCode {
     USER_DELETE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "USER_501", "회원 삭제 중 오류가 발생했습니다."),
 
     /** 회원정보 수정 */
-    USER_UPDATE_SUCCESS(HttpStatus.OK, "USER_2054", "회원 정보가 수정되었습니다."),
+    USER_UPDATE_SUCCESS(HttpStatus.OK, "USER_204", "회원 정보가 수정되었습니다."),
     USER_UPDATE_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "USER_502", "회원 정보 수정 중 오류가 발생했습니다."),
+
+    /** 회원정보 아이디 찾기, 비밀번호 찾기 */
+    USER_INFO_NOT_FOUND(HttpStatus.OK, "USER_003", "입력 하신 정보로 조회가 되지 않습니다."),
+    USER_PW_FIND_SUCCESS(HttpStatus.OK, "USER_205", "입력하신 정보로 가입된 회원이 조회 되었습니다.\n비밀번호 변경 화면으로 이동합니다."),
+    USER_FIND_FAIL(HttpStatus.INTERNAL_SERVER_ERROR, "USER_503", "회원 정보 수정 중 오류가 발생했습니다."),
 
     /** 인증 */
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "AUTH_401", "인증이 필요합니다."),

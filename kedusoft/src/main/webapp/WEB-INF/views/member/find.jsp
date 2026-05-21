@@ -66,6 +66,7 @@
 		
 		var f = document.f;
 		let formDataObj = {};
+		let requestUrl = '';
 		
 		let $form = $("form[name='f']");
 	    $form.find("input[name='searTypeId']").val(type);
@@ -88,8 +89,10 @@
 	        
 	        // 하이픈 제거 후 값 변경
 	        $("input[name='mtel']").val(tel.replace(/-/g, ""));
-	        
-	        formDataObj = {"memberName" : f.memberName.value, "memberPhone" :  f.mtel.value};
+			
+	        // 서버 요청 값 셋팅
+	        requestUrl = '/member/userId';
+	        formDataObj = {"memberId" : '', "memberName" : f.memberName.value, "memberPhone" :  f.mtel.value};
 	        
 	    } else if (type === 2) {
 	        // 비밀번호 찾기 유효성 검사
@@ -110,18 +113,38 @@
 	        // 하이픈 제거 후 값 변경
 	        $("input[name='mtel2']").val(tel.replace(/-/g, ""));
 	        
-	        formDataObj = {"memberId" : f.memberId.value, "memberPhone" :  f.mtel2.value};
+	        // 서버 요청값 셋팅
+	        requestUrl = '/member/userPw';
+	        formDataObj = {"memberId" : f.memberId.value, "memberName" : '', "memberPhone" :  f.mtel2.value};
 	    }
 	
 	    // 서버로 전송
         $.ajax({
-            url : "/member/userId", // 결과를 처리할 JSP 페이지
+            url : requestUrl, // 결과를 처리할 JSP 페이지
             type : "post",
             data : JSON.stringify(formDataObj),
             contentType: 'application/json; charset=UTF-8',
             success : function(res){
-
-                alert(res.message);
+				
+				alert(res.message);
+                // 아이디 찾기
+                if(type == 1){
+                	if(res.success == false){
+                		return false;
+                	}
+                	
+                // 비밀번호 찾기	
+                }else if(type == 2){
+                	if(res.success == false){
+                		return false;
+                	// 비밀번호 변경 페이지 이동
+                	}else{
+                		console.log(formDataObj);
+                		
+	               		f.action = "/member/changePw";
+                        f.submit();                	
+                    }              	
+                }
             },
             error : function(){
                 alert("에러가 발생했습니다.");
